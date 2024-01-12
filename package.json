@@ -1,0 +1,26 @@
+{
+  "name": "urity-backend",
+  "version": "0.0.1",
+  "description": "Backend of project urity",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AgilePanda482/Urity-Backend.git"
+  },
+  "author": "AgilePanda482",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AgilePanda482/Urity-Backend/issues"
+  },
+  "homepage": "https://github.com/AgilePanda482/Urity-Backend#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
