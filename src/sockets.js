@@ -1,4 +1,5 @@
 import {pool} from "./db"
+import { characterData } from "./api";
 
 export default (io) => {
     io.on('connection', (socket) => {
@@ -17,6 +18,10 @@ export default (io) => {
           
         })
 
+        setInterval(async () => {
+          const data = await characterData();
+          socket.emit('UID', data);
+        }, 30000);
 
         socket.on('disconnect', () => {
       
