@@ -4,14 +4,14 @@ import http from "http"
 import { pool } from "./db"
 import sockets from "./sockets"
 
-app.get("/ping", async (req, res) => {
-    const [rows, fields] = await pool.query("select * from alumnos")
-    console.log(rows)
-    res.json(rows)
-})
+// app.get("/ping", async (req, res) => {
+//     const [rows, fields] = await pool.query("select * from alumnos")
+//     console.log(rows)
+//     res.json(rows)
+// })
 
-app.listen(4000)
-console.log("Express escuchando en el puerto 4000")
+// app.listen(4000)
+// console.log("Express escuchando en el puerto 4000")
 
 
 const server = http.createServer(app)

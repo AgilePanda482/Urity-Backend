@@ -21,7 +21,7 @@ export default (io) => {
         setInterval(async () => {
           const data = await characterData();
           socket.emit('UID', data);
-        }, 30000);
+        }, 10000);
 
         socket.on('disconnect', () => {
       
