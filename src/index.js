@@ -16,7 +16,11 @@ import sockets from "./sockets"
 
 const server = http.createServer(app)
 const httpServer = server.listen(3000)
-const io = new websocketServer(httpServer)
+const io = new websocketServer(httpServer, {
+    cors: {
+        origin: "*",
+    },
+})
 sockets(io)
 
 

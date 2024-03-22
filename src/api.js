@@ -4,8 +4,7 @@ export const characterData = async () => {
     const URL = `https://rickandmortyapi.com/api/character/${idAleatorio}`;
 
     try {
-        const response = await axios.get(URL);
-        console.log(response.data)
+        const response = await axios.get(URL)
         return response.data;
     } catch (error) {
         console.error(error);
