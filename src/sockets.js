@@ -19,7 +19,7 @@ export default (io) => {
     const intervalId = setInterval(async () => {
       const data = await characterData();
       socket.emit('UID', data);
-      console.log(data);
+      //console.log(data);
     }, 10000);
 
     socket.on('disconnect', () => {
