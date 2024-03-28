@@ -4,7 +4,7 @@ import { createAccessToken } from "../libs/jwt";
 export const login = async (req, res) => {
     try{
         const { codigo, password } = req.body;
-        const [rows] = await pool.query("SELECT * FROM Users WHERE Codigo = ? AND password = ?", [codigo, password]);
+        const [rows] = await pool.query("SELECT * FROM Users WHERE Codigo = ? AND password = ?", [email, password]);
 
         if(!rows.length > 0) {
             return res.status(401).json({message: "Invalid credentials"});
