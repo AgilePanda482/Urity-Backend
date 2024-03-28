@@ -7,7 +7,7 @@ export const createUser = async (req, res) => {
         const dateUser = datoAcademico(grade, group, career, shift);
         const [rows] = await pool.query("INSERT INTO alumnos (Codigo, UID, Nombre, DatoAcademico) VALUES (?, ?, ?, ?)", [collegeCode, cardUID, name, dateUser]);
 
-        res.status(201).json({ id: rows.insertId, name, collegeCode, grade, group, career, shift, cardUID});
+        res.status(201).json({message: "User created successfully"});
     }catch(error){
         console.log(error);
         return res.status(500).json({message: "Internal server error"});
