@@ -46,7 +46,7 @@ export const verifyTokenRequest = async (req, res) => {
     }
 
     jwt.verify(token, variables.JWT_TOKEN, async (error, user) => {
-        if(err) return res.status(401).json({message: "Unauthorized denied"});
+        if(error) return res.status(401).json({message: "Unauthorized denied"});
 
         const userFound = await pool.query("SELECT * FROM Users WHERE Codigo = ?", [user.Codigo]);
         if(!userFound.length > 0) {
