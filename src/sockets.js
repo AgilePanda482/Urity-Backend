@@ -27,16 +27,18 @@ export default (io) => {
       if (data.verify) {
         // Simular una respuesta correcta o incorrecta de la base de datos
         const simulateDBResponse = Math.random() < 0.5; // 50% de probabilidad
-  
-        if (simulateDBResponse) {
-          // Simular una consulta correcta a la base de datos
-          const [result] = await pool.query('SELECT * FROM alumno WHERE UID = 043E3B0F1D5480');
-          io.emit('verifyUIDFromArduino', result[0]);
-        } else {
-          // Simular una consulta incorrecta a la base de datos
-          io.emit('verifyUIDFromArduino', { error: 'USUARIO NO ENCONTRADO' });
+        
+        setTimeout(async () => {
+          if (simulateDBResponse) {
+            // Simular una consulta correcta a la base de datos
+            const [result] = await pool.query('SELECT * FROM alumno WHERE UID = 043E3B0F1D5480');
+            io.emit('verifyUIDFromArduino', result[0]);
+          } else {
+            // Simular una consulta incorrecta a la base de datos
+            io.emit('verifyUIDFromArduino', { error: 'USUARIO NO ENCONTRADO' });
+          }
         }
-      }
+        , 2000)};
     });
     
     /*socket.on("verifyUIDFromArduino", async (data) => {
