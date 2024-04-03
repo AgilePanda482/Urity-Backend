@@ -32,7 +32,7 @@ export default (io) => {
         setTimeout(async () => {
           if (simulateDBResponse) {
             // Simular una consulta correcta a la base de datos
-            const [result] = await pool.query('SELECT * FROM alumno WHERE UID = 043E3B0F1D5480');
+            const [result] = await pool.query('SELECT * FROM alumnos WHERE UID = "043E3B0F1D5480"');
             io.emit('verifyUIDFromArduino', result[0]);
           } else {
             // Simular una consulta incorrecta a la base de datos
