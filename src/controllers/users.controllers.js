@@ -23,3 +23,18 @@ export const getAllUsers = async (req, res) => {
         return res.status(500).json({message: "Internal server error"});
     }
 }
+
+export const deleteUser = async (req, res) => {
+    try{
+        const [result] = await pool.query("DELETE FROM alumnos WHERE Codigo = ?", [req.params.id]);
+
+        if(result.affectedRows <= 0){
+            return res.status(404).json({message: "User not found"});
+        }
+
+        res.status(200).json({message: "Alumno con codigo: " + req.params.id + " eliminado correctamente"});
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}

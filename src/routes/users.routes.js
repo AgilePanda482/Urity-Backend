@@ -11,4 +11,7 @@ router.post("/create", verifyAuth, controllers.users.createUser)
 //GET All Users
 router.get("/getAll", verifyAuth, controllers.users.getAllUsers)
 
+//DELETE An User
+router.delete("/delete/:id", verifyAuth, controllers.users.deleteUser)
+
 export default router
