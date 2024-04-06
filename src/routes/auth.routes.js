@@ -1,15 +1,15 @@
 import { Router } from 'express'
-import { login, logout, profile, verifyTokenRequest } from "../controllers/auth.controllers.js"
-import { auth } from "../middlewares/auth.middleware.js"
+import { controllers } from '../controllers/index.controllers.js'
+import { auth, verifyAuth } from "../middlewares/auth.middleware.js"
 
 const router = Router()
 
-router.post("/login", login)
+router.post("/login", controllers.auth.login)
 
-router.post("/logout", logout)
+router.post("/logout", controllers.auth.logout)
 
-router.get("/profile", auth, profile)
+router.get("/profile", verifyAuth, controllers.auth.profile)
 
-router.get("/verify", verifyTokenRequest)
+router.get("/verify", verifyAuth, controllers.auth.verifyTokenRequest)
 
 export default router
