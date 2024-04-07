@@ -29,7 +29,7 @@ export const login = async (req, res) => {
 
 export const profile = async (req, res) => {
     console.log(req.user.Codigo);
-    const userFound = await pool.query("SELECT * FROM alumnos WHERE Codigo = ?", [req.user.Codigo]);
+    const userFound = await pool.query("SELECT * FROM alumnos WHERE codigo = ?", [req.user.Codigo]);
 
     if(!userFound.length > 0) {
         return res.status(404).json({message: "User not found"});

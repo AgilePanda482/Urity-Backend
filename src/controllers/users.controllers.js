@@ -5,7 +5,8 @@ export const createUser = async (req, res) => {
     try{
         const {collegeCode, name, grade, group, career, shift, cardUID} = req.body;
         const dateUser = datoAcademico(grade, group, career, shift);
-        const [rows] = await pool.query("INSERT INTO alumnos (Codigo, UID, Nombre, DatoAcademico) VALUES (?, ?, ?, ?)", [collegeCode, cardUID, name, dateUser]);
+        const [rows] = await pool.query("INSERT INTO alumnos (codigo, UIDTarjeta, nombre, informacionAcademica, estatus) VALUES (?, ?, ?, ?, ?)", [collegeCode, cardUID, name, dateUser, 1])
+        await pool.query("INSERT INTO ubicacionAlumnos (codigo, fechaHoraActualizacion) VALUES (?, NOW())", [collegeCode]);
 
         res.status(201).json({message: "User created successfully"});
     }catch(error){
@@ -26,7 +27,7 @@ export const getAllUsers = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
     try{
-        const [result] = await pool.query("DELETE FROM alumnos WHERE Codigo = ?", [req.params.id]);
+        const [result] = await pool.query("DELETE FROM alumnos WHERE codigo = ?", [req.params.id]);
 
         if(result.affectedRows <= 0){
             return res.status(404).json({message: "User not found"});
