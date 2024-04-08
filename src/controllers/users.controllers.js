@@ -4,8 +4,7 @@ import { informacionAcademica } from "../libs/dateUser.js";
 export const createUser = async (req, res) => {
     try{
         const {collegeCode, name, grade, group, career, shift, cardUID} = req.body;
-        const dateUser = informacionAcademica(grade, group, career, shift);
-        const [rows] = await pool.query("INSERT INTO alumnos (codigo, UIDTarjeta, nombres, informacionAcademica) VALUES (?, ?, ?, ?)", [collegeCode, cardUID, name, dateUser])
+        const [rows] = await pool.query("INSERT INTO alumnos (codigo, UIDTarjeta, nombres, grado, grupo, carrera, turno) VALUES (?, ?, ?, ?, ?, ?, ?)", [collegeCode, cardUID, name, grade, group, career, shift]);
         await pool.query("INSERT INTO estadoAlumnos (UIDTarjeta, localizacionAlumno, estadoInstitucional) VALUES (?, ?, ?)", [cardUID, 1, 1]);
 
         res.status(201).json({message: "User created successfully"});
