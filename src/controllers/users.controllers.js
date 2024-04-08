@@ -1,12 +1,12 @@
 import { pool } from "../db.js"
-import { datoAcademico } from "../libs/dateUser.js";
+import { informacionAcademica } from "../libs/dateUser.js";
 
 export const createUser = async (req, res) => {
     try{
         const {collegeCode, name, grade, group, career, shift, cardUID} = req.body;
-        const dateUser = datoAcademico(grade, group, career, shift);
-        const [rows] = await pool.query("INSERT INTO alumnos (codigo, UIDTarjeta, nombre, informacionAcademica, estatus) VALUES (?, ?, ?, ?, ?)", [collegeCode, cardUID, name, dateUser, 1])
-        await pool.query("INSERT INTO ubicacionAlumnos (codigo, fechaHoraActualizacion) VALUES (?, NOW())", [collegeCode]);
+        const dateUser = informacionAcademica(grade, group, career, shift);
+        const [rows] = await pool.query("INSERT INTO alumnos (codigo, UIDTarjeta, nombres, informacionAcademica) VALUES (?, ?, ?, ?)", [collegeCode, cardUID, name, dateUser])
+        await pool.query("INSERT INTO estadoAlumnos (UIDTarjeta, localizacionAlumno, estadoInstitucional) VALUES (?, ?, ?)", [cardUID, 1, 1]);
 
         res.status(201).json({message: "User created successfully"});
     }catch(error){

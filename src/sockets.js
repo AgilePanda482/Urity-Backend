@@ -6,19 +6,31 @@ export default (io) => {
     console.log(socket.id);
     console.log("JWT token test: ",socket.handshake.headers);
       
-    socket.on('event_name', async (data) => {
+    /*socket.on('readUID', async (data) => {
       console.log('saludando desde ESP32: ' + data.UID);
-      const [result] = await pool.query("select * from alumnos where UID = ?", [data.UID]);
+      const [result] = await pool.query("select * from alumnos where UIDTarjeta = ?", [data.UID]);
           
       if(result.length == 0){
         return io.emit("UID", {UID: "USUARIO NO ENCONTRADO"});
       }
+      
       io.emit("UID", result[0]);       
-    });
+    });*/
+
+    socket.on('readUID', async (data) => {
+      console.log('Tarjeta leida desde ESP32: ' + data.UID);
+      const [result] = await pool.query("select * from estadoAlumnos where UIDTarjeta = ?", [data.UID]);
+          
+      if(result.length == 0){
+        return socket.emit("sendDatafromUID", {UID: "USUARIO NO ENCONTRADO"});
+      }
+      
+      socket.emit("sedDatafromUID", result[0]);
+    })
 
     const intervalId = setInterval(async () => {
       const data = await characterData();
-      io.emit('UID', data);
+      socket.emit('UID', data);
       //console.log(data);
     }, 10000);
 
@@ -32,7 +44,7 @@ export default (io) => {
         setTimeout(async () => {
           if (simulateDBResponse) {
             // Simular una consulta correcta a la base de datos
-            const [result] = await pool.query('SELECT * FROM alumnos WHERE UID = "043E3B0F1D5480"');
+            const [result] = await pool.query('SELECT * FROM alumnos WHERE UIDTarjeta = "043E3B0F1D5480"');
             io.emit('verifyUIDFromArduino', result[0]);
           } else {
             // Simular una consulta incorrecta a la base de datos
