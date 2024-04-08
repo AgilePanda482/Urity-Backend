@@ -1,5 +1,5 @@
 import { pool } from "../db.js"
-import { informacionAcademica } from "../libs/dateUser.js";
+import { transformarDatosArray } from "../libs/mapingData.js";
 
 export const createUser = async (req, res) => {
     try{
@@ -17,7 +17,12 @@ export const createUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
     try{
         const [rows] = await pool.query("SELECT * FROM alumnos");
-        res.status(200).json(rows);
+
+        const arrayTransformado = transformarDatosArray(rows);
+        console.log(arrayTransformado);
+
+        res.status(200).json(arrayTransformado);
+
     }catch(error){
         console.log(error);
         return res.status(500).json({message: "Internal server error"});
