@@ -14,6 +14,12 @@ function transformarDatos(objeto) {
       'BGC': 'General por Competencias',
       'BGA': 'General por Areas Interdisciplinarias',
     };
+
+    const mapeoLocalizaciones = {
+      '1': 'Dentro',
+      '0': 'Fuera',
+      null: 'Desconocido',
+    }
   
     // Mapear 'Turno'
     if (objeto.turno && mapeoTurnos[objeto.turno]) {
@@ -23,6 +29,11 @@ function transformarDatos(objeto) {
     // Mapear 'carrera'
     if (objeto.carrera && mapeoCarreras[objeto.carrera]) {
       objeto.carrera = mapeoCarreras[objeto.carrera];
+    }
+
+    // Mapear 'localizacionAlumno'
+    if (mapeoLocalizaciones.hasOwnProperty(objeto.localizacionAlumno)) {
+      objeto.localizacionAlumno = mapeoLocalizaciones[objeto.localizacionAlumno];
     }
   
     // Retorna el objeto transformado
