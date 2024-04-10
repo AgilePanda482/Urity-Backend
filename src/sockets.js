@@ -22,7 +22,7 @@ export default (io) => {
       await pool.query("UPDATE estadoAlumnos SET localizacionAlumno = ? WHERE UIDTarjeta = ?", [data.localizacionAlumno, data.UID]);
       await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fechaSalidaIngreso, esEntrada) VALUES (?, now(), ?)", [data.UID, data.localizacionAlumno]);
       
-      const arrayTransformado = transformarDatosArray(await pool.query("SELECT a.codigo, a.nombres, a.carrera, e.localizacionAlumno FROM alumno a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;"));
+      const arrayTransformado = transformarDatosArray(await pool.query("SELECT a.codigo, a.nombres, a.carrera, e.localizacionAlumno FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;"));
       socket.emit("changeStatusFront" , arrayTransformado);
     })
 
