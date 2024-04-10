@@ -19,8 +19,6 @@ export const getAllUsers = async (req, res) => {
         const [rows] = await pool.query("SELECT a.codigo, a.nombres, a.carrera, e.localizacionAlumno FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;");
 
         const arrayTransformado = transformarDatosArray(rows);
-        console.log(arrayTransformado);
-
         res.status(200).json(arrayTransformado);
 
     }catch(error){

@@ -1,21 +1,11 @@
 import {pool} from "./db"
 import { characterData } from "./api";
+import { transformarDatosArray } from "./libs/mapingData";
 
 export default (io) => {
   io.on('connection', (socket) => {
     console.log(socket.id);
     console.log("JWT token test: ",socket.handshake.headers);
-      
-    /*socket.on('readUID', async (data) => {
-      console.log('saludando desde ESP32: ' + data.UID);
-      const [result] = await pool.query("select * from alumnos where UIDTarjeta = ?", [data.UID]);
-          
-      if(result.length == 0){
-        return io.emit("UID", {UID: "USUARIO NO ENCONTRADO"});
-      }
-      
-      io.emit("UID", result[0]);       
-    });*/
 
     socket.on('readUID', async (data) => {
       console.log('Tarjeta leida desde ESP32: ' + data.UID);
@@ -25,7 +15,15 @@ export default (io) => {
         return socket.emit("sendDatafromUID", {UID: "USUARIO NO ENCONTRADO"});
       }
       
-      socket.emit("sedDatafromUID", result[0]);
+      socket.emit("sendDatafromUID", result[0]);
+    })
+
+    socket.on('changeStatus', async (data) => {
+      await pool.query("UPDATE estadoAlumnos SET localizacionAlumno = ? WHERE UIDTarjeta = ?", [data.localizacionAlumno, data.UID]);
+      await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fechaSalidaIngreso, esEntrada) VALUES (?, now(), ?)", [data.UID, data.localizacionAlumno]);
+      
+      const arrayTransformado = transformarDatosArray(await pool.query("SELECT a.codigo, a.nombres, a.carrera, e.localizacionAlumno FROM alumno a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;"));
+      socket.emit("changeStatusFront" , arrayTransformado);
     })
 
     const intervalId = setInterval(async () => {
