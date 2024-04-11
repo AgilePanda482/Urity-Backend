@@ -26,11 +26,14 @@ export default (io) => {
       socket.emit("changeStatusFront" , arrayTransformado);
     })
 
-    const intervalId = setInterval(async () => {
-      const data = await characterData();
-      socket.emit('UID', data);
+    /*const intervalId = setInterval(async () => {
+      
+
+      const { rows } = await pool.query("SELECT * FROM logIngresosSalidas;");
+      
+      //socket.emit('UID', data);
       //console.log(data);
-    }, 10000);
+    }, 10000);*/
 
     socket.on('verify', async (data) => {
       //{veryify: true}
@@ -52,6 +55,7 @@ export default (io) => {
         , 2000)};
     });
     
+    //TODO: Implementar verificacion de UID por medio de consulta a la base de datos
     /*socket.on("verifyUIDFromArduino", async (data) => {
       try {
         // Realizar la consulta de forma asíncrona

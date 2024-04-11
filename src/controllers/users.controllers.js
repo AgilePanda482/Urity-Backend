@@ -27,6 +27,10 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
+export const updateUser = async (req, res) => {
+    //TODO: Implementar actualizacion de usuario
+}
+
 export const deleteUser = async (req, res) => {
     try{
         const [result] = await pool.query("DELETE FROM alumnos WHERE codigo = ?", [req.params.id]);
@@ -36,6 +40,16 @@ export const deleteUser = async (req, res) => {
         }
 
         res.status(200).json({message: "Alumno con codigo: " + req.params.id + " eliminado correctamente"});
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({message: "Internal server error"});
+    }
+}
+
+export const getLogs = async (req, res) => {
+    try{
+        const [rows] = await pool.query("SELECT a.nombres,  DATE_FORMAT(l.hora, '%H:%i') as hora, l.esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta;");
+        res.status(200).json(rows);
     }catch(error){
         console.log(error);
         return res.status(500).json({message: "Internal server error"});
