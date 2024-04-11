@@ -20,20 +20,29 @@ export default (io) => {
 
     socket.on('changeStatus', async (data) => {
       await pool.query("UPDATE estadoAlumnos SET localizacionAlumno = ? WHERE UIDTarjeta = ?", [data.localizacionAlumno, data.UID]);
-      await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fechaSalidaIngreso, esEntrada) VALUES (?, now(), ?)", [data.UID, data.localizacionAlumno]);
+      await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fecha, hora, esEntrada) VALUES (?, CURDATE(), CURTIME(), ?)", [data.UID, data.localizacionAlumno]);
       
       const arrayTransformado = transformarDatosArray(await pool.query("SELECT a.codigo, a.nombres, a.carrera, e.localizacionAlumno FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;"));
       socket.emit("changeStatusFront" , arrayTransformado);
     })
 
-    /*const intervalId = setInterval(async () => {
-      
+    const intervalId = setInterval(async () => {
+      let aux = 1;
 
-      const { rows } = await pool.query("SELECT * FROM logIngresosSalidas;");
-      
-      //socket.emit('UID', data);
-      //console.log(data);
-    }, 10000);*/
+      if (aux) {
+        // Simular una consulta correcta a la base de datos
+        await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fecha, hora, esEntrada) VALUES ('043E41E2356D80', CURDATE(), CURTIME(), ?)", [aux]);
+        const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, l.esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta");
+        io.emit('UID', rows);
+        aux = 0;
+      } else {
+        // Simular una consulta incorrecta a la base de datos
+        await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fecha, hora, esEntrada) VALUES ('043E41E2356D80', CURDATE(), CURTIME(), ?)", [aux]);
+        const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, l.esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta");
+        io.emit('UID', rows);
+        aux = 1;
+      }
+    }, 15000);
 
     socket.on('verify', async (data) => {
       //{veryify: true}
