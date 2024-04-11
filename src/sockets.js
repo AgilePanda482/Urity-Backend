@@ -14,7 +14,6 @@ export default (io) => {
       if(result.length == 0){
         return socket.emit("sendDatafromUID", {UID: "USUARIO NO ENCONTRADO"});
       }
-      
       socket.emit("sendDatafromUID", result[0]);
     })
 
@@ -22,27 +21,14 @@ export default (io) => {
       await pool.query("UPDATE estadoAlumnos SET localizacionAlumno = ? WHERE UIDTarjeta = ?", [data.localizacionAlumno, data.UID]);
       await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fecha, hora, esEntrada) VALUES (?, CURDATE(), CURTIME(), ?)", [data.UID, data.localizacionAlumno]);
       
-      const arrayTransformado = transformarDatosArray(await pool.query("SELECT a.codigo, a.nombres, a.carrera, e.localizacionAlumno FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;"));
-      socket.emit("changeStatusFront" , arrayTransformado);
+      const [ result ] = await pool.query("SELECT a.codigo, a.nombres, a.carrera, e.localizacionAlumno FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;");
+      const arrayTransformado = transformarDatosArray(result);
+      
+      io.emit("changeStatusFront" , arrayTransformado);
+      
+      const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, l.esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta");
+      io.emit("UID", rows);
     })
-
-    const intervalId = setInterval(async () => {
-      let aux = 1;
-
-      if (aux) {
-        // Simular una consulta correcta a la base de datos
-        await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fecha, hora, esEntrada) VALUES ('043E41E2356D80', CURDATE(), CURTIME(), ?)", [aux]);
-        const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, l.esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta");
-        io.emit('UID', rows);
-        aux = 0;
-      } else {
-        // Simular una consulta incorrecta a la base de datos
-        await pool.query("INSERT INTO logIngresosSalidas (UIDTarjeta, fecha, hora, esEntrada) VALUES ('043E41E2356D80', CURDATE(), CURTIME(), ?)", [aux]);
-        const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, l.esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta");
-        io.emit('UID', rows);
-        aux = 1;
-      }
-    }, 15000);
 
     socket.on('verify', async (data) => {
       //{veryify: true}
@@ -81,10 +67,9 @@ export default (io) => {
       }
     });*/
     
-
     socket.on('disconnect', () => {
       console.log('desconectado');
-      clearInterval(intervalId);  // Detiene el intervalo cuando el socket se desconecta
+      //clearInterval(intervalId);  // Detiene el intervalo cuando el socket se desconecta
     });
   });
 }
