@@ -20,4 +20,6 @@ router.put("/update/:id", verifyAuth, controllers.users.updateUser)
 //See logs
 router.get("/logs", verifyAuth, controllers.users.getLogs)
 
+router.get("/userByID/:id", verifyAuth, controllers.users.getAnUser)
+
 export default router
