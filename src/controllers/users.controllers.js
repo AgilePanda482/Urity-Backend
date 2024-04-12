@@ -27,9 +27,28 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
-export const updateUser = async (req, res) => {
-    //TODO: Implementar actualizacion de usuario
+export const getAnUser = async (req, res) => {
+    try{
+        const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, a.UIDTarjeta, e.localizacionAlumno, e.estadoInstitucional FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta WHERE a.UIDTarjeta = ?;", [req.params.id]);
+        if(rows.length <= 0){
+            return res.status(404).json({message: "User not found"});
+        }
+        res.status(200).json(rows[0]);
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({message: "Internal server error"});
+    }
 }
+
+/*export const updateUser = async (req, res) => {
+    try{
+
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({message: "Internal server error"});
+    }	
+
+}*/
 
 export const deleteUser = async (req, res) => {
     try{

@@ -12,7 +12,7 @@ export default (io) => {
       const [result] = await pool.query("select * from estadoAlumnos where UIDTarjeta = ?", [data.UID]);
           
       if(result.length == 0){
-        return socket.emit("sendDatafromUID", {UID: "USUARIO NO ENCONTRADO"});
+        return socket.emit("sendDatafromUID", {UID: 0});
       }
       socket.emit("sendDatafromUID", result[0]);
     })
