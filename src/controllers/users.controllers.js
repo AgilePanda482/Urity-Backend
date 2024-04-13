@@ -52,6 +52,7 @@ export const updateUser = async (req, res) => {
         await pool.query("UPDATE estadoAlumnos SET localizacionAlumno = ?, estadoInstitucional = ? WHERE UIDTarjeta = ?", [location, status, cardUID]);
 
         res.status(200).json({message: "User updated successfully"});
+        UIDTarjeta = null;
     }catch(error){
         console.log(error);
         return res.status(500).json({message: "Internal server error"});
