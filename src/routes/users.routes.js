@@ -15,7 +15,7 @@ router.get("/getAll", verifyAuth, controllers.users.getAllUsers)
 router.delete("/delete/:id", verifyAuth, controllers.users.deleteUser)
 
 //UPDATE An User
-router.put("/update/:id", verifyAuth, controllers.users.updateUser)
+router.put("/updateUser/:id", verifyAuth, controllers.users.updateUser)
 
 //See logs
 router.get("/logs", verifyAuth, controllers.users.getLogs)

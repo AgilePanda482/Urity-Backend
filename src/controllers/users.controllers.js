@@ -1,5 +1,6 @@
 import { pool } from "../db.js"
 import { transformarDatosArray } from "../libs/mapingData.js";
+let UIDTarjeta
 
 export const createUser = async (req, res) => {
     try{
@@ -17,7 +18,6 @@ export const createUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
     try{
         const [rows] = await pool.query("SELECT a.codigo, a.nombres, a.carrera, e.localizacionAlumno FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;");
-
         const arrayTransformado = transformarDatosArray(rows);
         res.status(200).json(arrayTransformado);
 
@@ -30,6 +30,9 @@ export const getAllUsers = async (req, res) => {
 export const getAnUser = async (req, res) => {
     try{
         const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, a.UIDTarjeta, e.localizacionAlumno, e.estadoInstitucional FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta WHERE a.UIDTarjeta = ?;", [req.params.id]);
+        UIDTarjeta = rows[0].UIDTarjeta;
+        
+
         if(rows.length <= 0){
             return res.status(404).json({message: "User not found"});
         }
@@ -40,15 +43,21 @@ export const getAnUser = async (req, res) => {
     }
 }
 
-/*export const updateUser = async (req, res) => {
+export const updateUser = async (req, res) => {
     try{
+        const {collegeCode, name, grade, group, career, shift, cardUID} = req.body;
+        const {location, status} = req.body;
 
+        await pool.query("UPDATE alumnos SET codigo = ?, UIDTarjeta = ?, nombres = ?, grado = ?, grupo = ?, turno = ?, carrera = ? WHERE UIDTarjeta = ?", [collegeCode, cardUID, name, grade, group, shift, career, UIDTarjeta]);
+        await pool.query("UPDATE estadoAlumnos SET localizacionAlumno = ?, estadoInstitucional = ? WHERE UIDTarjeta = ?", [location, status, cardUID]);
+
+        res.status(200).json({message: "User updated successfully"});
     }catch(error){
         console.log(error);
         return res.status(500).json({message: "Internal server error"});
     }	
 
-}*/
+}
 
 export const deleteUser = async (req, res) => {
     try{
