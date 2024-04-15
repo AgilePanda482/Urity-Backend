@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import { variables } from "../config"
 
-export const auth = (req, res, next) => {
+export const verifyAuth = (req, res, next) => {
     try{    
         const { token } = req.cookies
         
