@@ -18,8 +18,9 @@ export const login = async (req, res) => {
         });
 
         res.cookie("token", token)
-
-        res.json({message: "Login successful"});
+        res.header("Authorization", `Bearer ${token}`)
+        
+        res.status(200).send({message: "Login successful"});
 
     }catch(error){
         console.log(error);
