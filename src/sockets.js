@@ -1,5 +1,4 @@
 import { pool } from "./db";
-import { characterData } from "./api";
 import { transformarDatosArray } from "./libs/mapingData";
 
 export default (io) => {
@@ -42,7 +41,7 @@ export default (io) => {
       io.emit("changeStatusFront", arrayTransformado);
 
       const [rows] = await pool.query(
-        "SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, l.esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta"
+        "SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, DATE_FORMAT(l.fecha, '%d-%m-%y') as fecha, esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta;"
       );
       io.emit("UID", rows);
     });
@@ -58,7 +57,7 @@ export default (io) => {
     socket.on("verifyUIDFromArduino", async (data) => {
       try {
         const [result] = await pool.query(
-          "SELECT * FROM alumnos WHERE UIDTarjeta = ?",
+          "SELECT a.codigo, a.nombres, a.carrera, a.UIDTarjeta, e.localizacionAlumno FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;",
           [data.UID]
         );
 
@@ -68,8 +67,9 @@ export default (io) => {
             error: "USUARIO NO ENCONTRADO",
           });
         }
+        const arrayTransformado = transformarDatosArray(rows);
         io.emit("verifyUID", { verify: "false" });
-        io.emit("UIDFromArduino", result[0]);
+        io.emit("UIDFromArduino", arrayTransformado);
       } catch (error) {
         console.log(error);
       }
