@@ -1,4 +1,5 @@
-import { verifyCard } from "./sockets/front.sockets";
+import { readUID, verifyUIDFromArduino} from "./sockets/arduino.sockets";
+import { changeStatus, verifyCard} from "./sockets/front.sockets";
 
 export default (io) => {
   io.on("connection", (socket) => {
@@ -67,9 +68,9 @@ export default (io) => {
       }
     })*/
 
-    socket.on("verifyCard", async (data) => {
-      const verifyCard = await verifyCard(data);
-      io.emit("verifyUID", verifyCard);
+    socket.on("verifyCard", (data) => {
+      const IsTrue = verifyCard(data);
+      io.emit("verifyUID", IsTrue);
     })
 
     /*socket.on("verifyUIDFromArduino", async (data) => {
@@ -97,8 +98,9 @@ export default (io) => {
 
     socket.on("verifyUIDFromArduino", async (data) => {
       const {status, arrayTransformado} = await verifyUIDFromArduino(data);
-      io.emit("verifyUID", status);
-      io.emit("UIDFromArduino", arrayTransformado);
+      console.log("Valor de status: ", status.verify)
+      io.emit("verifyUID", status.verify);
+      io.emit("UIDFromArduino", arrayTransformado[0]);
     })
 
     socket.on("disconnect", () => {

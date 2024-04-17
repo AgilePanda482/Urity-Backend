@@ -1,5 +1,5 @@
-import { pool } from "./db";
-import { transformarDatosArray } from "./libs/mapingData";
+import { transformarDatosArray } from "../libs/mapingData";
+import { pool } from "../db";
 
 export async function readUID(data) {
   console.log("Tarjeta leida desde ESP32: " + data.UID);
@@ -28,8 +28,9 @@ export async function verifyUIDFromArduino(data){
             const arrayTransformado = {error: "USUARIO NO ENCONTRADO"}
             return status, arrayTransformado;
         }
-        const arrayTransformado = transformarDatosArray(result);        
-        return status, arrayTransformado[0];
+        const arrayTransformado = transformarDatosArray(result);    
+        console.log(arrayTransformado[0])  
+        return {status, arrayTransformado}
     }catch (error) {
         console.log(error);
     }

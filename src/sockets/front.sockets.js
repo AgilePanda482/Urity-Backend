@@ -1,10 +1,9 @@
-import { transformarDatosArray } from "./libs/mapingData";
-import { pool } from "./db";
+import { transformarDatosArray } from "../libs/mapingData";
+import { pool } from "../db";
 
-export async function verifyCard(data) {
+export function verifyCard(data){
     if(data.verify){
-        console.log(data);
-        return data.verify;
+        return data
     }
 }
 
@@ -29,8 +28,8 @@ export async function changeStatus(data) {
 
         const [rows] = await pool.query(
             "SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(DATE_ADD(l.hora, INTERVAL -6 HOUR), '%H:%i') as hora, DATE_FORMAT(l.fecha, '%d-%m-%y') as fecha, esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta;"
-        );
-        return arrayTransformado, rows;
+        )
+        return {arrayTransformado, rows};
     }catch (error) {
         console.log(error);
     }
