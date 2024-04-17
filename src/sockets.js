@@ -56,20 +56,21 @@ export default (io) => {
 
     socket.on("verifyUIDFromArduino", async (data) => {
       try {
+        const verify = { verify: "false" }
         const [result] = await pool.query(
-          "SELECT a.codigo, a.nombres, a.carrera, a.UIDTarjeta, e.localizacionAlumno FROM alumnos a JOIN estadoAlumnos e ON a.UIDTarjeta = e.UIDTarjeta;",
+          "SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, e.localizacionAlumno FROM alumnos AS a JOIN estadoAlumnos AS e ON a.UIDTarjeta = e.UIDTarjeta WHERE a.UIDTarjeta = ?;",
           [data.UID]
         );
 
         if (result.length == 0) {
-          io.emit("verifyUID", { verify: "false" });
+          io.emit("verifyUID", verify.verify);
           return io.emit("UIDFromArduino", {
             error: "USUARIO NO ENCONTRADO",
           });
         }
-        const arrayTransformado = transformarDatosArray(rows);
-        io.emit("verifyUID", { verify: "false" });
-        io.emit("UIDFromArduino", arrayTransformado);
+        const arrayTransformado = transformarDatosArray(result);
+        io.emit("verifyUID", verify.verify);
+        io.emit("UIDFromArduino", arrayTransformado[0]);	
       } catch (error) {
         console.log(error);
       }

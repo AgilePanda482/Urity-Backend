@@ -79,7 +79,7 @@ export const deleteUser = async (req, res) => {
 
 export const getLogs = async (req, res) => {
     try{
-        const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, DATE_FORMAT(l.fecha, '%d-%m-%y') as fecha, esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta;");
+        const [rows] = await pool.query("SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(DATE_ADD(l.hora, INTERVAL -6 HOUR), '%H:%i') as hora, esEntrada  FROM  alumnos a  JOIN logIngresosSalidas l  ON  a.UIDTarjeta = l.UIDTarjeta;");
         res.status(200).json(rows);
     }catch(error){
         console.log(error);
