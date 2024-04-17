@@ -1,12 +1,12 @@
-import { pool } from "./db";
-import { transformarDatosArray } from "./libs/mapingData";
+import { verifyCard } from "./sockets/front.sockets";
 
 export default (io) => {
   io.on("connection", (socket) => {
     console.log(socket.id);
     console.log("JWT token test: ", socket.handshake.headers);
 
-    socket.on("readUID", async (data) => {
+
+    /*socket.on("readUID", async (data) => {
       console.log("Tarjeta leida desde ESP32: " + data.UID);
       try {
         const [result] = await pool.query(
@@ -21,9 +21,14 @@ export default (io) => {
       } catch (error) {
         console.log(error);
       }
-    });
+    });*/
 
-    socket.on("changeStatus", async (data) => {
+    socket.on("readUID", async (data) => {
+      const result = await readUID(data);
+      io.emit("sendDatafromUID", result);
+    })
+
+      /*socket.on("changeStatus", async (data) => {
       await pool.query(
         "UPDATE estadoAlumnos SET localizacionAlumno = ? WHERE UIDTarjeta = ?",
         [data.localizacionAlumno, data.UID]
@@ -44,17 +49,30 @@ export default (io) => {
         "SELECT a.nombres, a.codigo, a.grado, a.grupo, a.carrera, a.turno, DATE_FORMAT(l.hora, '%H:%i') as hora, DATE_FORMAT(l.fecha, '%d-%m-%y') as fecha, esEntrada FROM alumnos a JOIN logIngresosSalidas l ON a.UIDTarjeta = l.UIDTarjeta;"
       );
       io.emit("UID", rows);
-    });
+    });*/
 
-    socket.on("verifyCard", async (data) => {
+    socket.on("changeStatus", async (data) => {
+      const {arrayTransformado, rows} = await changeStatus(data);
+      
+      //sockets emits
+      io.emit("changeStatusFront", arrayTransformado);
+      io.emit("UID", rows);
+    })
+
+    /*socket.on("verifyCard", async (data) => {
       const verify = data.verify
       if(verify){
         console.log(data);
         return io.emit("verifyUID", data);
       }
+    })*/
+
+    socket.on("verifyCard", async (data) => {
+      const verifyCard = await verifyCard(data);
+      io.emit("verifyUID", verifyCard);
     })
 
-    socket.on("verifyUIDFromArduino", async (data) => {
+    /*socket.on("verifyUIDFromArduino", async (data) => {
       try {
         const verify = { verify: "false" }
         const [result] = await pool.query(
@@ -74,7 +92,14 @@ export default (io) => {
       } catch (error) {
         console.log(error);
       }
-    });
+    });*/
+
+
+    socket.on("verifyUIDFromArduino", async (data) => {
+      const {status, arrayTransformado} = await verifyUIDFromArduino(data);
+      io.emit("verifyUID", status);
+      io.emit("UIDFromArduino", arrayTransformado);
+    })
 
     socket.on("disconnect", () => {
       console.log("desconectado");
