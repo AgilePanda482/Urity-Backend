@@ -15,4 +15,5 @@ const io = new websocketServer(httpServer, {
         origin: "*",
     },
 })
+console.log("Socket is running on port:", PORTSOCKET)
 sockets(io)
