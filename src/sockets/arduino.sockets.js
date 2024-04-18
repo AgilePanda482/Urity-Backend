@@ -1,5 +1,5 @@
-import { transformarDatosArray } from "../libs/mapingData";
-import { pool } from "../db";
+import { transformarDatosArray } from "../libs/mapingData.js";
+import { pool } from "../db.js";
 
 export async function readUID(data) {
   console.log("Tarjeta leida desde ESP32: " + data.UID);

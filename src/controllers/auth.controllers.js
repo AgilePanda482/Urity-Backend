@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-import { variables } from "../config";
-import { pool } from "../db";
-import { createAccessToken } from "../libs/jwt";
+import { variables } from "../config.js";
+import { pool } from "../db.js";
+import { createAccessToken } from "../libs/jwt.js";
 
 export const login = async (req, res) => {
     try{

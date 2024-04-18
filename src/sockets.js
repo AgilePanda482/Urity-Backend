@@ -1,5 +1,5 @@
-import { readUID, verifyUIDFromArduino} from "./sockets/arduino.sockets";
-import { changeStatus, verifyCard} from "./sockets/front.sockets";
+import { readUID, verifyUIDFromArduino} from "./sockets/arduino.sockets.js";
+import { changeStatus, verifyCard} from "./sockets/front.sockets.js";
 
 export default (io) => {
   io.on("connection", (socket) => {

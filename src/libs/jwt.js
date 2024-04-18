@@ -1,4 +1,4 @@
-import { variables } from "../config"
+import { variables } from "../config.js"
 import jwt from "jsonwebtoken"
 
 export async function createAccessToken(payload){
