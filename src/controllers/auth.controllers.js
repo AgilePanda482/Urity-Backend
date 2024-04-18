@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
-import { variables } from "../config";
-import { pool } from "../db";
-import { createAccessToken } from "../libs/jwt";
+import { JWT_TOKEN } from "../config.js";
+import { pool } from "../db.js";
+import { createAccessToken } from "../libs/jwt.js";
 
 export const login = async (req, res) => {
     try{
@@ -45,7 +45,7 @@ export const verifyTokenRequest = async (req, res) => {
         return res.status(401).json({message: "Unauthorized denied"});
     }
 
-    jwt.verify(token, variables.JWT_TOKEN, async (error, user) => {
+    jwt.verify(token, JWT_TOKEN, async (error, user) => {
         if(error) return res.status(401).json({message: "Unauthorized denied"});
 
         const userFound = await pool.query("SELECT * FROM Users WHERE Codigo = ?", [user.Codigo]);

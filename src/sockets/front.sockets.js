@@ -1,5 +1,5 @@
-import { transformarDatosArray } from "../libs/mapingData";
-import { pool } from "../db";
+import { transformarDatosArray } from "../libs/mapingData.js";
+import { pool } from "../db.js";
 
 export function verifyCard(data){
     if(data.verify){

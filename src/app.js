@@ -4,10 +4,11 @@ import cors from "cors"
 
 import indexRoutes from "./routes/index.routes.js"
 import {handle404, errorHandler} from "./middlewares/error.middleware.js"
+import { LINKFRONT } from "./config.js"
 
 const app = express()
 
-app.use(cors({origin: "http://localhost:5173", credentials: true}))
+app.use(cors({origin: LINKFRONT, credentials: true}))
 app.use(express.json())
 app.use(cookieParser())
 
