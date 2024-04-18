@@ -2,7 +2,7 @@ import { config } from "dotenv"
 config()
 
 //PORTS
-export const PORTEXPRESS          =     process.env.PORTEXPRESS
+export const PORT          =     process.env.PORT || 4000
 export const PORTSOCKET           =     process.env.PORTSOCKET
 
 //FRONTEND

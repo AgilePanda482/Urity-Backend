@@ -3,10 +3,10 @@ import http from "http"
 
 import app from "./app.js"
 import sockets from "./sockets.js"
-import { PORTEXPRESS, PORTSOCKET } from "./config.js"
+import { PORT, PORTSOCKET } from "./config.js"
 
 app.listen(PORTEXPRESS)
-console.log("Server is running on port:", PORTEXPRESS)
+console.log("Server is running on port:", PORT)
 
 const server = http.createServer(app)
 const httpServer = server.listen(PORTSOCKET)
