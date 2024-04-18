@@ -5,6 +5,9 @@ config()
 export const PORTEXPRESS          =     process.env.PORTEXPRESS
 export const PORTSOCKET           =     process.env.PORTSOCKET
 
+//FRONTEND
+export const LINKFRONT            =     process.env.LINKFRONT
+
 //DB
 export const MYSQLDATABASE        =     process.env.MYSQLDATABASE
 export const MYSQLHOST            =     process.env.MYSQLHOST
