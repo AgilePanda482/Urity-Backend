@@ -2,8 +2,8 @@ import { config } from "dotenv"
 config()
 
 //PORTS
-export const PORT          =     process.env.PORT || 4000
-export const PORTSOCKET           =     process.env.PORTSOCKET
+export const PORT                 =     process.env.PORT || 4000
+//export const PORTSOCKET           =     process.env.PORTSOCKET
 
 //FRONTEND
 export const LINKFRONT            =     process.env.LINKFRONT
@@ -16,4 +16,4 @@ export const MYSQLUSER            =     process.env.MYSQLUSER
 export const MYSQL_ROOT_PASSWORD  =     process.env.MYSQL_ROOT_PASSWORD
 
 //JWT
-export const JWT_TOKEN             =     process.env.JWT_TOKEN
+export const JWT_TOKEN            =     process.env.JWT_TOKEN
