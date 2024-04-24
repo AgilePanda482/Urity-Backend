@@ -8,7 +8,7 @@ import { LINKFRONT } from "./config.js"
 
 const app = express()
 
-app.use(cors({origin: LINKFRONT, credentials: true}))
+app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 
