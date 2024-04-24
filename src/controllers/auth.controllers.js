@@ -21,7 +21,7 @@ export const login = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             secure: true,
-            sameSite: 'lax' // Puedes cambiar a 'lax' o 'none' según tus necesidades
+            sameSite: 'none' // Puedes cambiar a 'lax' o 'none' según tus necesidades
         });
 
         res.header("Authorization", `Bearer ${token}`);
