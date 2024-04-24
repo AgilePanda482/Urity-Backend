@@ -17,8 +17,14 @@ export const login = async (req, res) => {
             Codigo: rows[0].Codigo
         });
 
-        res.cookie("token", token)
-        res.header("Authorization", `Bearer ${token}`)
+        // Añadir atributos a la cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none' // Puedes cambiar a 'lax' o 'none' según tus necesidades
+        });
+
+        res.header("Authorization", `Bearer ${token}`);
         
         res.status(200).send({message: "Login successful"});
 
