@@ -19,7 +19,7 @@ export const login = async (req, res) => {
 
         // Añadir atributos a la cookie
         res.cookie("token", token, {
-            httpOnly: true,
+            httpOnly: false,
             secure: true,
             sameSite: 'none' // Puedes cambiar a 'lax' o 'none' según tus necesidades
         });
