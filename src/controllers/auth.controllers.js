@@ -19,7 +19,7 @@ export const login = async (req, res) => {
 
         // Añadir atributos a la cookie
         res.cookie("token", token, {
-            httpOnly: true,
+            httpOnly: process.env.NODE_ENV !== "development",
             secure: true,
             sameSite: 'none' // Puedes cambiar a 'lax' o 'none' según tus necesidades
         });
@@ -53,7 +53,7 @@ export const verifyTokenRequest = async (req, res) => {
     }
 
     jwt.verify(token, JWT_TOKEN, async (error, user) => {
-        if(error) return res.status(401).json({message: "Unauthorized denied"});
+        if(error) return res.sendStatus(401).json({message: "Unauthorized denied"});
 
         const userFound = await pool.query("SELECT * FROM Users WHERE Codigo = ?", [user.Codigo]);
         if(!userFound.length > 0) {
