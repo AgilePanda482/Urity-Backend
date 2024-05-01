@@ -9,10 +9,12 @@ import { PORT } from "./config.js";
 const server = http.createServer(app);
 
 // Inicializa Socket.IO pasando el servidor HTTP
+// y activa la compatibilidad con la versión 3 de Engine.IO
 const io = new websocketServer(server, {
     cors: {
         origin: "*",
     },
+    allowEIO3: true // Activa la compatibilidad con Engine.IO v3
 });
 
 // Aquí puedes inicializar tus sockets
