@@ -8,7 +8,7 @@ export default (io) => {
 
     socket.on("readUID", async (data) => {
       console.log(data);
-      const result = await readUID(data);
+      const result = await readUID(data.UID);
       io.emit("sendDatafromUID", result);
     });
 
