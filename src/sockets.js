@@ -7,7 +7,8 @@ export default (io) => {
     console.log("JWT token test: ", socket.handshake.headers);
 
     socket.on("readUID", async (data) => {
-      const result = await readUID(data);
+      console.log(data);
+      const result = await readUID(data.UID);
       io.emit("sendDatafromUID", result);
     });
 
