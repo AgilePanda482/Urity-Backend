@@ -8,7 +8,11 @@ import { LINKFRONT } from "./config.js"
 
 const app = express()
 
-app.use(cors());
+app.use(cors({
+    origin: LINKFRONT,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}));
 app.use(express.json())
 app.use(cookieParser())
 
