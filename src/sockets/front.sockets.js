@@ -34,3 +34,19 @@ export async function changeStatus(data) {
         console.log(error);
     }
 }
+
+export async function searchUser(data) {
+    try {
+        const [rows] = await pool.query("SELECT * FROM alumnos WHERE nombres LIKE '?%';", [data])
+
+        if (rows.length == 0) {
+            const arrayTransformado = {error: "Ninguna concidencia encontrada"}
+            return arrayTransformado;
+        }
+        const arrayTransformado = transformarDatArray(rows);
+        return arrayTransformado;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
