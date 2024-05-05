@@ -13,6 +13,8 @@ const io = new websocketServer(server, {
     },
 });
 sockets(io);
+
 server.listen(PORT, () => {
     console.log("Express y Socket.IO están corriendo en el puerto:", PORT);
+    console.log("Environment:", process.env.NODE_ENV);
 });
