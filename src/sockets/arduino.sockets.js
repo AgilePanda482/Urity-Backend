@@ -2,7 +2,7 @@ import { transformarDatosArray } from "../libs/mapingData.js";
 import { pool } from "../db.js";
 
 export async function readUID(data) {
-  console.log("Tarjeta leida desde ESP32: " + data.UID);
+    console.log("Tarjeta leida desde ESP32: " + data.UID);
     try {
         const [result] = await pool.query(
         "select * from estadoAlumnos where UIDTarjeta = ?", [data.UID]);
