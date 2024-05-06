@@ -34,7 +34,6 @@ export default (io) => {
 
     socket.on("searchUserBack", async (data) => {
       const { arrayTransformado } = await searchUser(data);
-
       io.emit("searchUserFront", arrayTransformado);
     })
 

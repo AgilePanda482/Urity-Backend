@@ -37,14 +37,14 @@ export async function changeStatus(data) {
 
 export async function searchUser(data) {
     try {
-        const [rows] = await pool.query("SELECT * FROM alumnos WHERE nombres LIKE '?%';", [data])
+        const [rows] = await pool.query('SELECT * FROM alumnos WHERE nombres LIKE ?', [data + '%']);
 
         if (rows.length == 0) {
             const arrayTransformado = {error: "Ninguna concidencia encontrada"}
-            return arrayTransformado;
+            return { arrayTransformado };
         }
-        const arrayTransformado = transformarDatArray(rows);
-        return arrayTransformado;
+        const arrayTransformado = transformarDatosArray(rows);
+        return { arrayTransformado };
 
     } catch (error) {
         console.log(error);
