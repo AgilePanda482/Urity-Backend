@@ -1,12 +1,13 @@
 import { Router } from 'express'
 
+import  upload  from "../middlewares/multer.middleware.js"
 import { controllers } from '../controllers/index.controllers.js'
 import { verifyAuth } from "../middlewares/auth.middleware.js"
 
 const router = Router()
 
 //INSERT An User
-router.post("/create", verifyAuth, controllers.users.createUser)
+router.post("/create", verifyAuth, upload.single("image"), controllers.users.createUser)
 
 //GET All Users
 router.get("/getAll", verifyAuth, controllers.users.getAllUsers)

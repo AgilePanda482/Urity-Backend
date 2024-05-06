@@ -2,23 +2,17 @@ import path from "path"
 import express from "express"
 import cookieParser from "cookie-parser"
 import cors from "cors"
-import multer from "multer"
 
 import indexRoutes from "./routes/index.routes.js"
 import {handle404, errorHandler} from "./middlewares/error.middleware.js"
 import { LINKFRONT } from "./config.js"
 
-
 const app = express()
-const upload = multer()
 
 app.use(cors({
     credentials: true,
     origin: LINKFRONT
 }));
-app.use(multer({
-    dest: path.join(process.cwd(), "./src/images")
-}).single("image"));
 app.use(express.json())
 app.use(cookieParser())
 
