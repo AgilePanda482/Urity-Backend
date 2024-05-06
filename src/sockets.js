@@ -1,5 +1,5 @@
 import { readUID, verifyUIDFromArduino } from "./sockets/arduino.sockets.js";
-import { changeStatus, verifyCard } from "./sockets/front.sockets.js";
+import { changeStatus, verifyCard, searchUser } from "./sockets/front.sockets.js";
 
 export default (io) => {
   io.on("connection", (socket) => {
@@ -31,6 +31,11 @@ export default (io) => {
       io.emit("verifyUID", status.verify);
       io.emit("UIDFromArduino", arrayTransformado[0]);
     });
+
+    socket.on("searchUserBack", async (data) => {
+      const { arrayTransformado } = await searchUser(data);
+      io.emit("searchUserFront", arrayTransformado);
+    })
 
     socket.on("disconnect", () => {
       console.log("desconectado");
