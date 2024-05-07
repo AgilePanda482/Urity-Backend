@@ -1,3 +1,6 @@
+import fs from "fs/promises";
+import path from "path";
+
 import { pool } from "../db.js"
 import { transformarDatosArray } from "../libs/mapingData.js";
 let tarjetaUID = '';
@@ -5,7 +8,14 @@ let tarjetaUID = '';
 export const createUser = async (req, res) => {
     try {
         const {collegeCode, name, grade, group, career, shift, cardUID} = req.body;
-        const [rows] = await pool.query("INSERT INTO alumnos (codigo, UIDTarjeta, nombres, grado, grupo, carrera, turno) VALUES (?, ?, ?, ?, ?, ?, ?)", [collegeCode, cardUID, name, grade, group, career, shift]);
+        const {image} = req.image;
+
+        const newFilename = `${collegeCode}${path.extname(image.originalname)}`;
+        const newPath = path.join(image.destination, newFilename);
+
+        await fs.renameSync(image.path, newPath);
+
+        await pool.query("INSERT INTO alumnos (codigo, UIDTarjeta, nombres, grado, grupo, carrera, turno, fotoEstudiante) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [collegeCode, cardUID, name, grade, group, career, shift, newPath]);
         await pool.query("INSERT INTO estadoAlumnos (UIDTarjeta, localizacionAlumno, estadoInstitucional) VALUES (?, ?, ?)", [cardUID, 1, 1]);
 
         res.status(201).json({message: "User created successfully"});
