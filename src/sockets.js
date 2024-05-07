@@ -3,12 +3,9 @@ import { changeStatus, verifyCard, searchUser } from "./sockets/front.sockets.js
 
 export default (io) => {
   io.on("connection", (socket) => {
-    console.log(socket.id);
-    console.log("JWT token test: ", socket.handshake.headers);
-
     socket.on("readUID", async (data) => {
       console.log(data);
-      const result = await readUID(data.UID);
+      const result = await readUID(data);
       io.emit("sendDatafromUID", result);
     });
 
